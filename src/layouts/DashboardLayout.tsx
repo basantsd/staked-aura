@@ -51,9 +51,10 @@ export default function DashboardLayout() {
                 key={item.path}
                 onClick={() => navigate(item.path)}
                 whileHover={{ x: 4 }}
+                whileTap={{ scale: 0.97 }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   active
-                    ? "gradient-bg text-primary-foreground shadow-lg"
+                    ? "gradient-bg text-primary-foreground sidebar-active-glow"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                 }`}
               >
@@ -77,7 +78,7 @@ export default function DashboardLayout() {
       <motion.div
         animate={{ marginLeft: collapsed ? 72 : 240 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="flex-1 flex flex-col min-h-screen"
+        className="flex-1 flex flex-col min-h-screen relative z-[1]"
       >
         {/* Top bar */}
         <header className="h-16 border-b border-border glass-card rounded-none flex items-center justify-between px-6 sticky top-0 z-20">
@@ -86,7 +87,7 @@ export default function DashboardLayout() {
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Globe className="w-4 h-4" />
               <span>Ethereum</span>
-              <span className="w-2 h-2 rounded-full bg-success" />
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
             </div>
             <button className="glass-card-hover flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-foreground">
               <Wallet className="w-4 h-4" />
@@ -98,15 +99,15 @@ export default function DashboardLayout() {
           </div>
         </header>
 
-        {/* Page content */}
+        {/* Page content with transitions */}
         <main className="flex-1 p-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -12, filter: "blur(4px)" }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <Outlet />
             </motion.div>

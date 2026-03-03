@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlassCard } from "@/components/GlassCard";
 import { GradientButton } from "@/components/GradientButton";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { Vote, Clock, Plus, X } from "lucide-react";
 
 const proposals = [
@@ -20,7 +21,13 @@ export default function GovernancePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Governance</h1>
+        <motion.h1
+          initial={{ opacity: 0, x: -12 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="text-2xl font-bold text-foreground"
+        >
+          Governance
+        </motion.h1>
         <GradientButton size="sm" onClick={() => setCreateModal(true)}>
           <Plus className="w-4 h-4 mr-1 inline" /> Create Proposal
         </GradientButton>
@@ -31,7 +38,9 @@ export default function GovernancePage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <p className="text-sm text-muted-foreground">Your Voting Power</p>
-            <p className="text-2xl font-bold gradient-text">1.82%</p>
+            <p className="text-2xl font-bold gradient-text">
+              <AnimatedCounter end={1.82} suffix="%" decimals={2} />
+            </p>
           </div>
           <div className="flex gap-3">
             <button className="px-4 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all">
@@ -47,11 +56,15 @@ export default function GovernancePage() {
       {/* Proposals */}
       <div className="space-y-4">
         {proposals.map((p, i) => (
-          <GlassCard key={p.id} delay={0.1 + i * 0.1} className="gradient-border">
+          <GlassCard key={p.id} delay={0.08 + i * 0.08} className="gradient-border">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${p.status === "Active" ? "bg-success/20 text-success" : "bg-primary/20 text-primary"}`}>
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                    p.status === "Active"
+                      ? "bg-success/20 text-success badge-pulse"
+                      : "bg-primary/20 text-primary"
+                  }`}>
                     {p.status}
                   </span>
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -63,16 +76,16 @@ export default function GovernancePage() {
 
                 {/* Vote bar */}
                 <div className="mt-3 flex items-center gap-3">
-                  <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
+                  <div className="flex-1 h-2.5 bg-secondary rounded-full overflow-hidden relative">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${p.yes}%` }}
-                      transition={{ duration: 1, delay: 0.3 + i * 0.1 }}
+                      transition={{ duration: 1.2, delay: 0.3 + i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                       className="h-full gradient-bg rounded-full"
                     />
                   </div>
-                  <span className="text-xs text-muted-foreground w-20 text-right">
-                    {p.yes}% Yes
+                  <span className="text-xs text-muted-foreground w-24 text-right">
+                    <AnimatedCounter end={p.yes} suffix="% Yes" decimals={0} duration={1200} />
                   </span>
                 </div>
               </div>
@@ -94,19 +107,20 @@ export default function GovernancePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4"
             onClick={() => setVotingModal(null)}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.92, y: 24 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              exit={{ opacity: 0, scale: 0.92, y: 24 }}
+              transition={{ type: "spring", stiffness: 350, damping: 30 }}
               className="glass-card gradient-border p-6 max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-foreground">Cast Your Vote</h2>
-                <button onClick={() => setVotingModal(null)} className="text-muted-foreground hover:text-foreground">
+                <button onClick={() => setVotingModal(null)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -136,35 +150,36 @@ export default function GovernancePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4"
             onClick={() => setCreateModal(false)}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.92, y: 24 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              exit={{ opacity: 0, scale: 0.92, y: 24 }}
+              transition={{ type: "spring", stiffness: 350, damping: 30 }}
               className="glass-card gradient-border p-6 max-w-lg w-full"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-foreground">Create Proposal</h2>
-                <button onClick={() => setCreateModal(false)} className="text-muted-foreground hover:text-foreground">
+                <button onClick={() => setCreateModal(false)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="space-y-4">
                 <input
                   placeholder="Proposal Title"
-                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none input-glow transition-all"
                 />
                 <textarea
                   placeholder="Description"
                   rows={4}
-                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none input-glow transition-all resize-none"
                 />
                 <input
                   placeholder="Action Target Address"
-                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none input-glow transition-all"
                 />
                 <GradientButton className="w-full" onClick={() => setCreateModal(false)}>
                   Submit Proposal
