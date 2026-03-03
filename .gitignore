@@ -29,4 +29,3 @@ guides/
 # Foundry (Smart Contracts)
 contracts/cache/
 contracts/out/
-contracts/lib/
