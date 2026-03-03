@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Guide files (learning materials)
+guides/
+
+# Foundry (Smart Contracts)
+contracts/cache/
+contracts/out/
+contracts/lib/
